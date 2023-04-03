@@ -48,11 +48,17 @@ const PokemonName:  NextPage<Props> = ({pokemon}) => {
 
             <Grid xs={12} sm={8}>
                 <Card>
-                <Card.Header css={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Text transform='capitalize' h1>{pokemon.name}</Text>
-                    <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
-                        {isFavorite ? "Favorite" : "Add Favorite"}
-                    </Button>
+                <Card.Header>
+                    <Grid.Container css={{display: 'flex', justifyContent: 'flex-end'}} gap={2}>
+                    <Grid xs={12} sm={6} >
+                        <Text transform='capitalize' h1>{pokemon.name}</Text>
+                    </Grid>
+                    <Grid xs={12} sm={6} css={{display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                        <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
+                            {isFavorite ? "Favorite" : "Add Favorite"}
+                        </Button>
+                    </Grid>
+                    </Grid.Container>
                 </Card.Header>
                 <Card.Body>
                     <Text size={30}>Sprites</Text>
