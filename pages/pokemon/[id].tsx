@@ -6,7 +6,7 @@ import { PokemonDetails } from '@/interfaces';
 import { Button, Card, Container, Grid, Text } from "@nextui-org/react";
 import Image from "next/image";
 import { useState } from "react";
-import { localFavorite } from "@/utils";
+import { localFavorite, getPokemonInfo } from "@/utils";
 import confetti from "canvas-confetti";
 
 
@@ -111,9 +111,15 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
     const { data } = await  pokeApi.get<PokemonDetails>(`pokemon/${id}`)// your fetch function here 
 
+    const pokemon = {
+        id: data.id,
+        name: data.name,
+        sprites: data.sprites
+    }
+
     return {
         props: {
-            pokemon: data
+            pokemon: await getPokemonInfo(id)
         }
     }
 }

@@ -1,1 +1,2 @@
-export {default as localFavorite } from './localFavorite'
+export {default as localFavorite } from './localFavorite';
+export * from './getPokemoninfo'
