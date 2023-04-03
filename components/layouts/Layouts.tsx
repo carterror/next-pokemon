@@ -12,7 +12,7 @@ interface MyProps {
 
 export const Layouts: FC<MyProps> = ({children, title}) => {
 
-    const origin = (typeof window ! == 'undefined') ?? '';
+    const origin = (typeof window === 'undefined') ? '' : window.origin;
     
     return (
     <>
