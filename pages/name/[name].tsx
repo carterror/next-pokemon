@@ -50,14 +50,14 @@ const PokemonName:  NextPage<Props> = ({pokemon}) => {
                 <Card>
                 <Card.Header>
                     <Grid.Container css={{display: 'flex', justifyContent: 'flex-end'}} gap={2}>
-                    <Grid xs={12} sm={6} >
-                        <Text transform='capitalize' h1>{pokemon.name}</Text>
-                    </Grid>
-                    <Grid xs={12} sm={6} css={{display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
-                        <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
-                            {isFavorite ? "Favorite" : "Add Favorite"}
-                        </Button>
-                    </Grid>
+                        <Grid xs={12} sm={6} >
+                            <Text transform='capitalize' h1>{pokemon.name}</Text>
+                        </Grid>
+                        <Grid xs={12} sm={6} css={{display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                            <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
+                                {isFavorite ? "Favorite" : "Add Favorite"}
+                            </Button>
+                        </Grid>
                     </Grid.Container>
                 </Card.Header>
                 <Card.Body>
@@ -107,7 +107,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         paths: pokemon151.map(name => ({
             params: { name }
         })),
-        fallback: false
+        fallback: 'blocking'
     }
 }
 
@@ -115,12 +115,22 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
 
     const {name} = params as { name:string }
-
+    const pokemon = await getPokemonInfo(name)
+    
+    if (!pokemon) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
+    }
 
     return {
         props: {
-            pokemon: await getPokemonInfo(name)
-        }
+            pokemon
+        },
+        revalidate: 86400
     }
 }
 

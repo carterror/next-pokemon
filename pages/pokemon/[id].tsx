@@ -52,10 +52,16 @@ const PokemonPage: NextPage<Props> = ({pokemon}) => {
             <Grid xs={12} sm={8}>
                 <Card>
                 <Card.Header css={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Text transform='capitalize' h1>{pokemon.name}</Text>
-                    <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
-                        {isFavorite ? "Favorite" : "Add Favorite"}
-                    </Button>
+                    <Grid.Container css={{display: 'flex', justifyContent: 'flex-end'}} gap={2}>
+                        <Grid xs={12} sm={6} >
+                            <Text transform='capitalize' h1>{pokemon.name}</Text>
+                        </Grid>
+                        <Grid xs={12} sm={6} css={{display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                            <Button color="gradient" ghost={!isFavorite} onPress={onToggleFavorite}>
+                                {isFavorite ? "Favorite" : "Add Favorite"}
+                            </Button>
+                        </Grid>
+                    </Grid.Container>
                 </Card.Header>
                 <Card.Body>
                     <Text size={30}>Sprites</Text>
@@ -101,7 +107,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
         paths: pokemon151.map(id => ({
             params: { id }
         })),
-        fallback: false
+        fallback: 'blocking'
     }
 }
 
@@ -109,18 +115,22 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
     const {id} = params as { id:string }
 
-    const { data } = await  pokeApi.get<PokemonDetails>(`pokemon/${id}`)// your fetch function here 
+    const pokemon = await getPokemonInfo(id);
 
-    const pokemon = {
-        id: data.id,
-        name: data.name,
-        sprites: data.sprites
+    if (!pokemon) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
     }
 
     return {
         props: {
-            pokemon: await getPokemonInfo(id)
-        }
+            pokemon
+        },
+        revalidate: 86400
     }
 }
 

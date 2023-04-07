@@ -4,6 +4,7 @@ import { pokeApi } from '@/api';
 import { Pokemon, PokemonList } from '@/interfaces';
 import { Grid } from '@nextui-org/react';
 import { PokemonCard } from '@/components/pokemon';
+import Search from '@/components/ui/search';
 
 interface Props {
   pokemons: Pokemon[]
@@ -13,6 +14,7 @@ const HomePage: NextPage<Props> = ({pokemons}) => {
   
   return (
     <Layouts title="Listado de porkemon">
+      <Search />
       <Grid.Container gap={2} justify='flex-start'>
 
           {pokemons.map((p) =>
